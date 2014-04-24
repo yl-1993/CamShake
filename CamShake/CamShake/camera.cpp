@@ -48,7 +48,8 @@ void Camera::run()
 			break;
 		}
 	 }
-
+	 QPixmap map =  QPixmap("bk");
+	 this->window->ui.label_detection->setPixmap(map);
 	 cvReleaseCapture(&pCap);
      //cvDestroyWindow("Camera");
      return;

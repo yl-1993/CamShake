@@ -4,7 +4,7 @@
 #include <opencv\cv.h>
 #include <qthread.h>
 #include <stdio.h> 
-
+#include <qsplitter.h>
 class CamShake;
 class Camera:public QThread
 {
@@ -30,6 +30,8 @@ public:
 		KeydownList = -1;
 		cascade_name = "haarcascade_frontalface_alt.xml";
 		isExist = true;
+		this->installEventFilter(this);
+		
 	}
 
 	void con_detect_and_draw(IplImage* img);

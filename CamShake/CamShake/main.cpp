@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 	Camera cam;
 	cam.window = &w;
 	w.cam = &cam;
-	
+
 	w.show();
 	//cam.run();
 	return a.exec();
