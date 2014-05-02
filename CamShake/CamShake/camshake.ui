@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>667</width>
-    <height>444</height>
+    <width>864</width>
+    <height>549</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,7 +52,7 @@
         <string notr="true">font: 75 9pt &quot;Consolas&quot;;</string>
        </property>
        <property name="title">
-        <string>Qt</string>
+        <string>Settings</string>
        </property>
        <widget class="QPlainTextEdit" name="plainTextEdit">
         <property name="geometry">
@@ -287,7 +287,7 @@
        <string notr="true">background-image: url(:/CamShake/bk);</string>
       </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
     </item>
@@ -298,7 +298,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>667</width>
+     <width>864</width>
      <height>20</height>
     </rect>
    </property>

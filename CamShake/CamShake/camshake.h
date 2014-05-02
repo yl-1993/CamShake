@@ -17,7 +17,7 @@ public:
 	Ui::CamShakeClass ui;
 protected:
 	void closeEvent(QCloseEvent* ev);
-
+	void keyPressEvent(QKeyEvent *e);
 public slots:
 		void startConCam();
 		void startDisCam();
