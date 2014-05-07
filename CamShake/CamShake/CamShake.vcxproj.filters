@@ -78,6 +78,9 @@
     <ClInclude Include="GeneratedFiles\ui_camshake.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyQPlainTextEdit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="haarcascade_frontalface_alt.xml" />

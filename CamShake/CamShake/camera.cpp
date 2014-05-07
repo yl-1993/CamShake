@@ -3,6 +3,7 @@
 #include <stdlib.h> 
 #include <string.h> 
 #include <assert.h> 
+#include <vector>
 #include <math.h> 
 #include <float.h> 
 #include <limits.h> 
@@ -100,45 +101,45 @@ void Camera::dis_detect_and_draw(IplImage* img)
 			{
 				if(center.y - prev.y > threshold)
 				{
-					keybd_event(39,0,0,0);
-					keybd_event(40,0,0,0);
+					key_press(m_right,0,0,0);
+					key_press(m_down,0,0,0);
 				}
 				else if (center.y - prev.y < -threshold)
 				{
-					keybd_event(39,0,0,0);
-					keybd_event(38,0,0,0);
+					key_press(m_right,0,0,0);
+					key_press(m_up,0,0,0);
 				}
 				else
 				{
-					keybd_event(39,0,0,0);
+					key_press(m_right,0,0,0);
 				}
 			}
 			else if(center.x - prev.x > threshold)
 			{
 				if(center.y - prev.y > threshold)
 				{
-					keybd_event(37,0,0,0);
-					keybd_event(40,0,0,0);
+					key_press(m_left,0,0,0);
+					key_press(m_down,0,0,0);
 				}
 				else if (center.y - prev.y < -threshold)
 				{
-					keybd_event(37,0,0,0);
-					keybd_event(38,0,0,0);
+					key_press(m_left,0,0,0);
+					key_press(m_up,0,0,0);
 				}
 				else
 				{
-					keybd_event(37,0,0,0);
+					key_press(m_left,0,0,0);
 				}
 			}
 			else
 			{
 				if(center.y - prev.y > threshold)
 				{
-					keybd_event(40,0,0,0);
+					key_press(m_down,0,0,0);
 				}
 				else if (center.y - prev.y < -threshold)
 				{
-					keybd_event(38,0,0,0);
+					key_press(m_up,0,0,0);
 				}
 			}
 		}
@@ -199,36 +200,37 @@ void Camera::con_detect_and_draw(IplImage* img)
 		}
 		else
 		{
-			if(KeydownList != -1)
-				keybd_event(KeydownList,0,0,0);
+			if(KeydownList.value[0] != -1)
+				key_press(KeydownList,0,0,0);
 			
 			if(center.x - prev.x < -(0.5*threshold))
 			{
 				if(center.y - prev.y > threshold)
 				{
 					allkey_up();
-					keybd_event(39,0,0,0);
-					keybd_event(40,0,0,0);
+					key_press(m_right,0,0,0);
+					key_press(m_down,0,0,0);
 				}
 				else if (center.y - prev.y < -threshold)
 				{
 					allkey_up();
-					keybd_event(39,0,0,0);
-					keybd_event(38,0,0,0);
+					key_press(m_right,0,0,0);
+					key_press(m_up,0,0,0);
 				}
 				else if (center.x - prev.x < -(threshold))
 				{
 					//弹起左键同时按下右键
-					keybd_event(37,0,KEYEVENTF_KEYUP,0); //left
-					keybd_event(39,0,0,0);
-					KeydownList = 39;
+					key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
+					key_press(m_right,0,0,0);
+					KeydownList = m_right;
 					
 				}
 				else
 				{
 					//弹起左键
-					keybd_event(37,0,KEYEVENTF_KEYUP,0); //left
-					KeydownList = -1;
+					key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
+					KeydownList.len = 1;
+					KeydownList.value[0] = -1;
 				}
 			}
 			else if(center.x - prev.x > 0.5*threshold)
@@ -236,38 +238,39 @@ void Camera::con_detect_and_draw(IplImage* img)
 				if(center.y - prev.y > threshold)
 				{
 					allkey_up();
-					keybd_event(37,0,0,0);
-					keybd_event(40,0,0,0);
+					key_press(m_left,0,0,0);
+					key_press(m_down,0,0,0);
 				}
 				else if (center.y - prev.y < -threshold)
 				{
 					allkey_up();
-					keybd_event(37,0,0,0);
-					keybd_event(38,0,0,0);
+					key_press(m_left,0,0,0);
+					key_press(m_up,0,0,0);
 				}
 				else if (center.x - prev.x > threshold)
 				{
 					//弹起右键同时按下左键
-					keybd_event(39,0,KEYEVENTF_KEYUP,0); //right
-					keybd_event(37,0,0,0);
-					KeydownList = 37;
+					key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
+					key_press(m_left,0,0,0);
+					KeydownList = m_left;
 					put_text_onscreen(img,"right",0,0);
 				}
 				else
 				{
-					keybd_event(39,0,KEYEVENTF_KEYUP,0); //right
-					KeydownList = -1;
+					key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
+					KeydownList.len = 1;
+					KeydownList.value[0] = -1;
 				}
 			}
 			else
 			{
 				if(center.y - prev.y > threshold)
 				{
-					keybd_event(40,0,0,0);
+					key_press(m_down,0,0,0);
 				}
 				else if (center.y - prev.y < -threshold)
 				{
-					keybd_event(38,0,0,0);
+					key_press(m_up,0,0,0);
 				}
 			}
 		}
@@ -290,10 +293,114 @@ void Camera::con_detect_and_draw(IplImage* img)
 
 void Camera::allkey_up()
 {
-	keybd_event(37,0,KEYEVENTF_KEYUP,0); //left
-	keybd_event(38,0,KEYEVENTF_KEYUP,0); //up
-	keybd_event(39,0,KEYEVENTF_KEYUP,0); //right
-	keybd_event(40,0,KEYEVENTF_KEYUP,0); //down
+	key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
+	key_press(m_up,0,KEYEVENTF_KEYUP,0); //up
+	key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
+	key_press(m_down,0,KEYEVENTF_KEYUP,0); //down
+}
+
+void Camera::key_press(PressedKey key, int bScan, int eventType, int dwExtraInfo)
+{
+	int len = key.len;
+	for(int i = 0 ; i < len; i++)
+	{
+		keybd_event(key.value[i],0,eventType,0);
+	}
+}
+
+void split(std::string& s, std::string delim,std::vector< std::string >* res)  
+{  
+    size_t last = 0;  
+    size_t index=s.find_first_of(delim,last);  
+    while (index!=std::string::npos)  
+    {  
+        res->push_back(s.substr(last,index-last));  
+        last=index+1;  
+        index=s.find_first_of(delim,last);  
+    }  
+    if (index-last>0)  
+    {  
+        res->push_back(s.substr(last,index-last));  
+    }  
+} 
+
+void Camera::set_key_bind(string* str_arr)
+{
+	int len = 1;
+	//按+号分割组合键
+	vector<string> fields;
+	//LEFT
+	split(str_arr[0],"+",&fields);
+	len = fields.size();
+	m_left.len = len;
+	for(int i = 0 ; i < len; i++)
+	{
+		if(key_map[fields[i]])
+		{
+			m_left.value[i] = key_map[fields[i]];
+		}
+		else
+		{
+			m_left.len = 1;
+			m_left.value[0] = VK_LEFT;
+			break;
+		}
+	}
+	fields.clear();
+	//RIGHT
+	split(str_arr[1],"+",&fields);
+	len = (int)fields.size();
+	m_right.len = len;
+	for(int i = 0 ; i < len; i++)
+	{
+		if(key_map[fields[i]])
+		{
+			m_right.value[i] = key_map[fields[i]];
+		}
+		else
+		{
+			m_right.len = 1;
+			m_right.value[0] = VK_RIGHT;
+			break;
+		}
+	}
+	fields.clear();
+	//UP
+	split(str_arr[2],"+",&fields);
+	len = (int)fields.size();
+	m_up.len = len;
+	for(int i = 0 ; i < len; i++)
+	{
+		if(key_map[fields[i]])
+		{
+			m_up.value[i] = key_map[fields[i]];
+		}
+		else
+		{
+			m_up.len = 1;
+			m_up.value[0] = VK_UP;
+			break;
+		}
+	}
+	fields.clear();
+	//DOWN
+	split(str_arr[3],"+",&fields);
+	len = (int)fields.size();
+	m_down.len = len;
+	for(int i = 0 ; i < len; i++)
+	{
+		if(key_map[fields[i]])
+		{
+			m_down.value[i] = key_map[fields[i]];
+		}
+		else
+		{
+			m_down.len = 1;
+			m_down.value[0] = VK_DOWN;
+			break;
+		}
+	}
+	fields.clear();
 }
 
 void Camera::put_text_onscreen(IplImage* img, const char* text, int x, int y)

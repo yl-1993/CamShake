@@ -15,6 +15,7 @@ public:
 
 public:
 	Ui::CamShakeClass ui;
+
 protected:
 	void closeEvent(QCloseEvent* ev);
 	void keyPressEvent(QKeyEvent *e);
@@ -22,7 +23,10 @@ public slots:
 		void startConCam();
 		void startDisCam();
 		void stopCam();
-		
+		void setKeyBind();
+		void setMenuDisabled();
+		void setMenuAble();
+		string q2s(const QString &s);
 };
 
 #endif // CAMSHAKE_H

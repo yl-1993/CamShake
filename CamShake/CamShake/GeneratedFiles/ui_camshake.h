@@ -19,12 +19,13 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "myqplaintextedit.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -35,10 +36,10 @@ public:
     QHBoxLayout *horizontalLayout;
     QSplitter *splitter;
     QGroupBox *groupBox;
-    QPlainTextEdit *plainTextEdit;
-    QPlainTextEdit *plainTextEdit_2;
-    QPlainTextEdit *plainTextEdit_3;
-    QPlainTextEdit *plainTextEdit_7;
+    MyQPlainTextEdit *plainTextEdit;
+    MyQPlainTextEdit *plainTextEdit_2;
+    MyQPlainTextEdit *plainTextEdit_3;
+    MyQPlainTextEdit *plainTextEdit_7;
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
@@ -46,6 +47,8 @@ public:
     QPushButton *ContinuousBtn;
     QPushButton *DiscreteBtn;
     QPushButton *StopBtn;
+    QRadioButton *Face;
+    QRadioButton *Fist;
     QLabel *label_detection;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -55,7 +58,19 @@ public:
     {
         if (CamShakeClass->objectName().isEmpty())
             CamShakeClass->setObjectName(QStringLiteral("CamShakeClass"));
+        CamShakeClass->setEnabled(true);
         CamShakeClass->resize(864, 549);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(CamShakeClass->sizePolicy().hasHeightForWidth());
+        CamShakeClass->setSizePolicy(sizePolicy);
+        CamShakeClass->setMinimumSize(QSize(0, 540));
+        CamShakeClass->setMaximumSize(QSize(16777215, 549));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        CamShakeClass->setWindowIcon(icon);
+        CamShakeClass->setWindowOpacity(0.95);
         CamShakeClass->setStyleSheet(QStringLiteral("font: 75 9pt \"Consolas\";"));
         centralWidget = new QWidget(CamShakeClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
@@ -63,45 +78,35 @@ public:
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout->setContentsMargins(-1, -1, -1, 5);
         splitter = new QSplitter(centralWidget);
         splitter->setObjectName(QStringLiteral("splitter"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
-        splitter->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
+        splitter->setSizePolicy(sizePolicy1);
         splitter->setMinimumSize(QSize(200, 0));
         splitter->setOrientation(Qt::Vertical);
         groupBox = new QGroupBox(splitter);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
-        groupBox->setSizePolicy(sizePolicy1);
-        groupBox->setMinimumSize(QSize(0, 200));
+        groupBox->setEnabled(true);
+        sizePolicy.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
+        groupBox->setSizePolicy(sizePolicy);
+        groupBox->setMinimumSize(QSize(0, 480));
         groupBox->setStyleSheet(QStringLiteral("font: 75 9pt \"Consolas\";"));
-        plainTextEdit = new QPlainTextEdit(groupBox);
+        plainTextEdit = new MyQPlainTextEdit(groupBox);
         plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
         plainTextEdit->setGeometry(QRect(90, 25, 71, 25));
-        plainTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        plainTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-        plainTextEdit->setCenterOnScroll(false);
-        plainTextEdit_2 = new QPlainTextEdit(groupBox);
+        plainTextEdit_2 = new MyQPlainTextEdit(groupBox);
         plainTextEdit_2->setObjectName(QStringLiteral("plainTextEdit_2"));
         plainTextEdit_2->setGeometry(QRect(90, 65, 71, 25));
-        plainTextEdit_2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        plainTextEdit_2->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        plainTextEdit_3 = new QPlainTextEdit(groupBox);
+        plainTextEdit_3 = new MyQPlainTextEdit(groupBox);
         plainTextEdit_3->setObjectName(QStringLiteral("plainTextEdit_3"));
         plainTextEdit_3->setGeometry(QRect(90, 105, 71, 25));
-        plainTextEdit_3->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        plainTextEdit_3->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        plainTextEdit_7 = new QPlainTextEdit(groupBox);
+        plainTextEdit_7 = new MyQPlainTextEdit(groupBox);
         plainTextEdit_7->setObjectName(QStringLiteral("plainTextEdit_7"));
         plainTextEdit_7->setGeometry(QRect(90, 140, 71, 25));
-        plainTextEdit_7->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         label = new QLabel(groupBox);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(30, 30, 54, 12));
@@ -118,7 +123,7 @@ public:
         ContinuousBtn = new QPushButton(groupBox);
         ContinuousBtn->setObjectName(QStringLiteral("ContinuousBtn"));
         ContinuousBtn->setEnabled(true);
-        ContinuousBtn->setGeometry(QRect(30, 210, 100, 30));
+        ContinuousBtn->setGeometry(QRect(50, 300, 100, 30));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(100);
         sizePolicy2.setVerticalStretch(20);
@@ -130,7 +135,7 @@ public:
         DiscreteBtn = new QPushButton(groupBox);
         DiscreteBtn->setObjectName(QStringLiteral("DiscreteBtn"));
         DiscreteBtn->setEnabled(true);
-        DiscreteBtn->setGeometry(QRect(30, 260, 101, 30));
+        DiscreteBtn->setGeometry(QRect(50, 350, 101, 30));
         QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
@@ -141,8 +146,14 @@ public:
         StopBtn = new QPushButton(groupBox);
         StopBtn->setObjectName(QStringLiteral("StopBtn"));
         StopBtn->setEnabled(true);
-        StopBtn->setGeometry(QRect(30, 320, 101, 30));
+        StopBtn->setGeometry(QRect(50, 400, 101, 30));
         StopBtn->setMaximumSize(QSize(16777215, 30));
+        Face = new QRadioButton(groupBox);
+        Face->setObjectName(QStringLiteral("Face"));
+        Face->setGeometry(QRect(40, 190, 89, 16));
+        Fist = new QRadioButton(groupBox);
+        Fist->setObjectName(QStringLiteral("Fist"));
+        Fist->setGeometry(QRect(40, 220, 89, 16));
         splitter->addWidget(groupBox);
 
         horizontalLayout->addWidget(splitter);
@@ -156,6 +167,8 @@ public:
         label_detection->setSizePolicy(sizePolicy4);
         label_detection->setMinimumSize(QSize(640, 480));
         label_detection->setStyleSheet(QStringLiteral("background-image: url(:/CamShake/bk);"));
+        label_detection->setFrameShape(QFrame::NoFrame);
+        label_detection->setFrameShadow(QFrame::Sunken);
 
         horizontalLayout->addWidget(label_detection);
 
@@ -166,6 +179,7 @@ public:
         CamShakeClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(CamShakeClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setEnabled(true);
         CamShakeClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(CamShakeClass);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -187,6 +201,8 @@ public:
         ContinuousBtn->setText(QApplication::translate("CamShakeClass", "ContiMode", 0));
         DiscreteBtn->setText(QApplication::translate("CamShakeClass", "DiscMode", 0));
         StopBtn->setText(QApplication::translate("CamShakeClass", "Stop", 0));
+        Face->setText(QApplication::translate("CamShakeClass", "Face", 0));
+        Fist->setText(QApplication::translate("CamShakeClass", "Fist", 0));
         label_detection->setText(QString());
     } // retranslateUi
 
