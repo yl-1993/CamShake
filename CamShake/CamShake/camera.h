@@ -46,6 +46,7 @@ public:
 
 	Camera(QObject *parent = NULL):threshold(12), status(0)
 	{
+		rect = 0;
 		prev.x = 0;
 		prev.y = 0;
 		KeydownList.len = 1;
