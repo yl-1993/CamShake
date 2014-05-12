@@ -34,6 +34,10 @@ public:
 		{
 			m_str = "Down";
 		}
+		else if(e->key() == Qt::Key_Return || e->key() == Qt::Key_Tab)
+		{
+			return;
+		}
 		else
 		{
 			m_str = e->text();

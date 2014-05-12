@@ -21,6 +21,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -49,6 +50,7 @@ public:
     QPushButton *StopBtn;
     QRadioButton *Face;
     QRadioButton *Fist;
+    QSlider *horizontalSlider;
     QLabel *label_detection;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -154,6 +156,10 @@ public:
         Fist = new QRadioButton(groupBox);
         Fist->setObjectName(QStringLiteral("Fist"));
         Fist->setGeometry(QRect(40, 220, 89, 16));
+        horizontalSlider = new QSlider(groupBox);
+        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
+        horizontalSlider->setGeometry(QRect(20, 440, 160, 22));
+        horizontalSlider->setOrientation(Qt::Horizontal);
         splitter->addWidget(groupBox);
 
         horizontalLayout->addWidget(splitter);
@@ -186,6 +192,7 @@ public:
         CamShakeClass->setStatusBar(statusBar);
 
         retranslateUi(CamShakeClass);
+        QObject::connect(horizontalSlider, SIGNAL(valueChanged(int)), CamShakeClass, SLOT(setRect()));
 
         QMetaObject::connectSlotsByName(CamShakeClass);
     } // setupUi
