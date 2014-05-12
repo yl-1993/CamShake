@@ -182,6 +182,43 @@ void Camera::con_detect_and_draw(IplImage* img)
     cvClearMemStorage(storage); 
     CvSeq* objects = cvHaarDetectObjects(small_img,cascade,storage,1.1,1,CV_HAAR_DO_CANNY_PRUNING,cvSize(150,150));
 
+	int left_thr, right_thr, up_thr, down_thr;
+	int h = img->height;
+	int rectWidth = rect * h / 100;
+	CvPoint p1, p2;
+	p1.x = img->width / 2 - rectWidth / 2;
+	p1.y = img->height / 2 - rectWidth / 2;
+	p2.x = img->width / 2 + rectWidth / 2; 
+	p2.y = img->height / 2 + rectWidth / 2;
+	cvRectangle(img, p1, p2, colors[2]); 
+	rectWidth = (h >> 1) - (rectWidth >> 1);
+	//up
+	p1.x = img->width / 2 - rectWidth / 2;
+	p2.x = img->width / 2 + rectWidth /2;
+	p1.y = 0;
+	p2.y = rectWidth;
+	up_thr = p2.y;
+	cvRectangle(img, p1, p2, colors[3]);
+	//down
+	p1.y += h - rectWidth;
+	p2.y += h - rectWidth;
+	down_thr = p1.y;
+	cvRectangle(img, p1, p2, colors[4]);
+	int move = (h>>1) - (rectWidth>>1); 
+	//left
+	p1.y -= move;
+	p2.y -= move;
+	p1.x -= move;
+	p2.x -= move;
+	left_thr = p2.x;
+	cvRectangle(img, p1, p2, colors[5]);
+	//right
+	move = move << 1;
+	p1.x += move;
+	p2.x += move;
+	right_thr = p1.x;
+	cvRectangle(img, p1, p2, colors[6]);
+
 
     //Loop through found objects and draw boxes around them 
     for( int i = 0; i < (objects? objects->total : 0); i++ ) 
@@ -193,6 +230,46 @@ void Camera::con_detect_and_draw(IplImage* img)
         center.y = cvRound((r->y + r->height*0.5)*scale); 
         radius = cvRound((r->width + r->height)*0.25*scale); 
         cvCircle(img, center, radius, colors[i%8], 3, 8, 0);
+
+		bool isVertical = true, isHorizontal = true;
+
+		if(center.x > right_thr)
+		{
+			key_press(m_right,0,KEYEVENTF_KEYUP,0); 
+			key_press(m_left,0,0,0);
+		}
+		else if(center.x < left_thr)
+		{
+			key_press(m_left,0,KEYEVENTF_KEYUP,0); 
+			key_press(m_right,0,0,0);
+
+		}
+		else
+		{
+			isHorizontal = false;
+		}
+		
+		if(center.y < up_thr)
+		{
+			key_press(m_down,0,KEYEVENTF_KEYUP,0); 
+			key_press(m_up,0,0,0);		
+		}
+		else if(center.y > down_thr)
+		{
+			key_press(m_up,0,KEYEVENTF_KEYUP,0); 
+			key_press(m_down,0,0,0);		
+		}
+		else
+		{
+			isVertical = false;
+		}
+
+		if(!isHorizontal&&!isVertical)
+		{
+			allkey_up();
+		}
+		break;
+		/*
 		if(prev.x == 0 && prev.y == 0)//³õÊ¼×´Ì¬
 		{   
 			prev = center;
@@ -276,36 +353,9 @@ void Camera::con_detect_and_draw(IplImage* img)
 		}
 		prev = center;
 		break;
+		*/
     }
 	
-	int h = img->height;
-	int rectWidth = rect * h / 100;
-	CvPoint p1, p2;
-	p1.x = img->width / 2 - rectWidth / 2;
-	p1.y = img->height / 2 - rectWidth / 2;
-	p2.x = img->width / 2 + rectWidth / 2; 
-	p2.y = img->height / 2 + rectWidth / 2;
-	cvRectangle(img, p1, p2, colors[2]); 
-	rectWidth = (h >> 1) - (rectWidth >> 1);
-	p1.x = img->width / 2 - rectWidth / 2;
-	p2.x = img->width / 2 + rectWidth /2;
-	p1.y = 0;
-	p2.y = rectWidth;
-	
-	cvRectangle(img, p1, p2, colors[3]);
-	p1.y += h - rectWidth;
-	p2.y += h - rectWidth;
-	cvRectangle(img, p1, p2, colors[4]);
-	int move = (h>>1) - (rectWidth>>1); 
-	p1.y -= move;
-	p2.y -= move;
-	p1.x -= move;
-	p2.x -= move;
-	cvRectangle(img, p1, p2, colors[5]);
-	move = move << 1;
-	p1.x += move;
-	p2.x += move;
-	cvRectangle(img, p1, p2, colors[6]);
 	//cvShowImage( "Camera", img ); 
 	cvConvertImage(img, img, CV_CVTIMG_SWAP_RB);
 	int labelW = this->window->ui.label_detection->size().width();

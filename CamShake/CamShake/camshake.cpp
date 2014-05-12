@@ -7,7 +7,6 @@ CamShake::CamShake(QWidget *parent)
 	ui.setupUi(this);
 	//this->setWindowFlags(Qt::FramelessWindowHint);//ÎÞ¿ò
 	this->ui.Face->setChecked(true);
-	//this->ui.groupBox->setStyleSheet("*{background-image: url(:/1.jpg);}");
 	//ÐÅºÅÓë²Û
 	connect(this->ui.ContinuousBtn, SIGNAL(clicked()), this, SLOT(startConCam()));
 	connect(this->ui.DiscreteBtn, SIGNAL(clicked()), this, SLOT(startDisCam()));
@@ -17,27 +16,9 @@ CamShake::CamShake(QWidget *parent)
 
 void CamShake::keyPressEvent(QKeyEvent *e)
 {
-	qWarning("Taste::keyPressEvent(QKeyEvent *e)");
+	//qWarning("Taste::keyPressEvent(QKeyEvent *e)");
 	//e->accept();  // Annehmen des KeyEvents
-	qDebug("keyPressEvent(QKeyEvent *e) here");
-	/*
-	if( e->key() == Qt::Key_Return)
-	{
-		switch ( e->key() )
-		{                     // Hinweis: die Rueckgabecodes der einzelnen Tasten findet man in der "qnamespace.h"
-			case Qt::Key_Left:     // Pfeiltaste "links" gedueckt?
-				qWarning("Taste links");
-				break;
-			case Qt::Key_X:     // Taste "x" gedueckt?
-				qWarning("Taste x");
-				break;
-		}
-	}
-	else
-	{
-		keyPressEvent(e);
-	}
-	*/
+	//qDebug("keyPressEvent(QKeyEvent *e) here");
 }
 
 CamShake::~CamShake()
@@ -127,6 +108,6 @@ void CamShake::closeEvent(QCloseEvent* evn)
 
 void CamShake::setRect()
 {
-	
+	// 0 - 100
 	this->cam->rect = this->ui.horizontalSlider->value();
 }
