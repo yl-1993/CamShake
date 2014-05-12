@@ -299,6 +299,19 @@
          <string>Fist</string>
         </property>
        </widget>
+       <widget class="QSlider" name="horizontalSlider">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>440</y>
+          <width>160</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -366,5 +379,25 @@
  <resources>
   <include location="camshake.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>CamShakeClass</receiver>
+   <slot>setRect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>494</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>225</x>
+     <y>526</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setRect()</slot>
+ </slots>
 </ui>

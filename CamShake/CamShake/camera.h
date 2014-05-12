@@ -39,6 +39,7 @@ public:
 	PressedKey m_down;
 	PressedKey m_left;
 	PressedKey m_right;
+	int rect;
 
 	//key map
 	std::hash_map<std::string, int> key_map;

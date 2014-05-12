@@ -125,3 +125,8 @@ void CamShake::closeEvent(QCloseEvent* evn)
 	while(this->cam->isRunning());
 }
 
+void CamShake::setRect()
+{
+	
+	this->cam->rect = this->ui.horizontalSlider->value();
+}

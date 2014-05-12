@@ -27,6 +27,7 @@ public slots:
 		void setMenuDisabled();
 		void setMenuAble();
 		string q2s(const QString &s);
+		void setRect();
 };
 
 #endif // CAMSHAKE_H
