@@ -83,7 +83,8 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">font: 75 9pt &quot;Consolas&quot;;</string>
+        <string notr="true">font: 75 12pt &quot;Consolas&quot;;
+color:white;</string>
        </property>
        <property name="title">
         <string>Settings</string>
@@ -97,6 +98,9 @@
           <height>25</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font:9pt</string>
+        </property>
        </widget>
        <widget class="MyQPlainTextEdit" name="plainTextEdit_2" native="true">
         <property name="geometry">
@@ -106,6 +110,10 @@
           <width>71</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font:9pt
+</string>
         </property>
        </widget>
        <widget class="MyQPlainTextEdit" name="plainTextEdit_3" native="true">
@@ -117,6 +125,9 @@
           <height>25</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font:9pt</string>
+        </property>
        </widget>
        <widget class="MyQPlainTextEdit" name="plainTextEdit_7" native="true">
         <property name="geometry">
@@ -127,15 +138,21 @@
           <height>25</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font:9pt</string>
+        </property>
        </widget>
        <widget class="QLabel" name="label">
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>20</x>
           <y>30</y>
           <width>54</width>
           <height>12</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>LEFT</string>
@@ -144,11 +161,14 @@
        <widget class="QLabel" name="label_2">
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>20</x>
           <y>70</y>
           <width>54</width>
           <height>12</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>RIGHT</string>
@@ -157,11 +177,14 @@
        <widget class="QLabel" name="label_3">
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>20</x>
           <y>110</y>
           <width>54</width>
           <height>12</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>UP</string>
@@ -173,11 +196,14 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>20</x>
           <y>150</y>
           <width>54</width>
           <height>12</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>DOWN</string>
@@ -190,7 +216,7 @@
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>300</y>
+          <y>310</y>
           <width>100</width>
           <height>30</height>
          </rect>
@@ -214,7 +240,7 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">font: 75 9pt &quot;Consolas&quot;;</string>
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>ContiMode</string>
@@ -227,7 +253,7 @@
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>350</y>
+          <y>360</y>
           <width>101</width>
           <height>30</height>
          </rect>
@@ -247,6 +273,9 @@
         <property name="autoFillBackground">
          <bool>false</bool>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
         <property name="text">
          <string>DiscMode</string>
         </property>
@@ -258,7 +287,7 @@
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>400</y>
+          <y>410</y>
           <width>101</width>
           <height>30</height>
          </rect>
@@ -269,6 +298,9 @@
           <height>30</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
         <property name="text">
          <string>Stop</string>
         </property>
@@ -276,11 +308,14 @@
        <widget class="QRadioButton" name="Face">
         <property name="geometry">
          <rect>
-          <x>40</x>
+          <x>20</x>
           <y>190</y>
           <width>89</width>
           <height>16</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>Face</string>
@@ -289,11 +324,14 @@
        <widget class="QRadioButton" name="Fist">
         <property name="geometry">
          <rect>
-          <x>40</x>
+          <x>20</x>
           <y>220</y>
           <width>89</width>
           <height>16</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>Fist</string>
@@ -303,7 +341,7 @@
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>440</y>
+          <y>260</y>
           <width>160</width>
           <height>22</height>
          </rect>
