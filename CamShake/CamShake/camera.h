@@ -9,6 +9,8 @@
 #include <hash_map>
 using namespace std;
 
+#define FILE_NUM 8
+
 class CamShake;
 
 struct PressedKey
@@ -17,14 +19,20 @@ struct PressedKey
 	int value[5];	//°´¼üµÄÖµ
 };
 
+struct Cascade
+{
+	string cname[FILE_NUM];
+	int csize;
+};
+
 class Camera:public QThread
 {
 	 Q_OBJECT
 public:
-	CvMemStorage* storage;
-	CvHaarClassifierCascade* cascade;
+	CvMemStorage** storage;
+	CvHaarClassifierCascade** cascade;
 
-	char* cascade_name;
+	Cascade cascade_name;
 	int GetKey;
 	PressedKey KeydownList;
 	CvPoint prev;
@@ -51,7 +59,10 @@ public:
 		prev.y = 0;
 		KeydownList.len = 1;
 		KeydownList.value[0] = -1;
-		cascade_name = "haarcascade_frontalface_alt.xml";
+		storage = new CvMemStorage*[FILE_NUM];
+		cascade = new CvHaarClassifierCascade*[FILE_NUM];
+		cascade_name.cname[0] = "haarcascade_frontalface_alt.xml";
+		cascade_name.csize = 1;
 		isExist = true;
 		//init default key
 		m_up.len = 1;

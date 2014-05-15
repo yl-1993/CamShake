@@ -14,7 +14,11 @@
  
 void Camera::run()
 {
-	cascade = (CvHaarClassifierCascade*)cvLoad( cascade_name, 0, 0, 0 ); 
+	for(int i = 0 ; i < cascade_name.csize; i++)
+	{
+		cascade[i] = (CvHaarClassifierCascade*)cvLoad( cascade_name.cname[i].c_str(), 0, 0, 0 );
+		storage[i] = cvCreateMemStorage(0);
+	}
 
 	CvCapture* pCap = cvCaptureFromCAM(0);//这里-1也可以，不过我的电脑装的有CyberLink YouCam软件，
 
@@ -26,7 +30,7 @@ void Camera::run()
         fprintf( stderr, "ERROR: Could not load classifier cascade\n" ); 
         return ; 
     } 
-    storage = cvCreateMemStorage(0); 
+     
   
     // IplImage 是结构体类型，用来保存一帧图像的信息，也就是一帧
     // 图像的所有像素值构成的一个矩阵
@@ -75,77 +79,83 @@ void Camera::dis_detect_and_draw(IplImage* img)
 
     //Detect objects if any 
 
-    cvClearMemStorage(storage); 
-    CvSeq* objects = cvHaarDetectObjects(small_img,cascade,storage,1.1,1,CV_HAAR_DO_CANNY_PRUNING,cvSize(150,150));
-
+	CvSeq** objects = new CvSeq*[FILE_NUM];
+	for(int i = 0; i < cascade_name.csize; ++i)
+	{
+		cvClearMemStorage(storage[i]); 
+		objects[i] = cvHaarDetectObjects(small_img,cascade[i],storage[i],1.1,1,CV_HAAR_DO_CANNY_PRUNING,cvSize(150,150));
+	}
 
     //Loop through found objects and draw boxes around them 
-    for( int i = 0; i < (objects? objects->total : 0); i++ ) 
-    { 
-        CvRect* r = (CvRect*)cvGetSeqElem(objects, i); 
-        CvPoint center; 
-        int radius; 
-        center.x = cvRound((r->x + r->width*0.5)*scale); 
-        center.y = cvRound((r->y + r->height*0.5)*scale); 
-        radius = cvRound((r->width + r->height)*0.25*scale); 
-        cvCircle(img, center, radius, colors[i%8], 3, 8, 0);
-		if(prev.x == 0 && prev.y == 0)//初始状态
-		{   
-			prev = center;
-			break;
-		}
-		else
-		{
-			allkey_up();
-			if(center.x - prev.x < -threshold)
-			{
-				if(center.y - prev.y > threshold)
-				{
-					key_press(m_right,0,0,0);
-					key_press(m_down,0,0,0);
-				}
-				else if (center.y - prev.y < -threshold)
-				{
-					key_press(m_right,0,0,0);
-					key_press(m_up,0,0,0);
-				}
-				else
-				{
-					key_press(m_right,0,0,0);
-				}
-			}
-			else if(center.x - prev.x > threshold)
-			{
-				if(center.y - prev.y > threshold)
-				{
-					key_press(m_left,0,0,0);
-					key_press(m_down,0,0,0);
-				}
-				else if (center.y - prev.y < -threshold)
-				{
-					key_press(m_left,0,0,0);
-					key_press(m_up,0,0,0);
-				}
-				else
-				{
-					key_press(m_left,0,0,0);
-				}
+	for(int k = 0; k < cascade_name.csize; k++)
+	{
+		for( int i = 0; i < (objects[k]? objects[k]->total : 0); i++ ) 
+		{ 
+			CvRect* r = (CvRect*)cvGetSeqElem(objects[k], i); 
+			CvPoint center; 
+			int radius; 
+			center.x = cvRound((r->x + r->width*0.5)*scale); 
+			center.y = cvRound((r->y + r->height*0.5)*scale); 
+			radius = cvRound((r->width + r->height)*0.25*scale); 
+			cvCircle(img, center, radius, colors[i%8], 3, 8, 0);
+			if(prev.x == 0 && prev.y == 0)//初始状态
+			{   
+				prev = center;
+				break;
 			}
 			else
 			{
-				if(center.y - prev.y > threshold)
+				allkey_up();
+				if(center.x - prev.x < -threshold)
 				{
-					key_press(m_down,0,0,0);
+					if(center.y - prev.y > threshold)
+					{
+						key_press(m_right,0,0,0);
+						key_press(m_down,0,0,0);
+					}
+					else if (center.y - prev.y < -threshold)
+					{
+						key_press(m_right,0,0,0);
+						key_press(m_up,0,0,0);
+					}
+					else
+					{
+						key_press(m_right,0,0,0);
+					}
 				}
-				else if (center.y - prev.y < -threshold)
+				else if(center.x - prev.x > threshold)
 				{
-					key_press(m_up,0,0,0);
+					if(center.y - prev.y > threshold)
+					{
+						key_press(m_left,0,0,0);
+						key_press(m_down,0,0,0);
+					}
+					else if (center.y - prev.y < -threshold)
+					{
+						key_press(m_left,0,0,0);
+						key_press(m_up,0,0,0);
+					}
+					else
+					{
+						key_press(m_left,0,0,0);
+					}
+				}
+				else
+				{
+					if(center.y - prev.y > threshold)
+					{
+						key_press(m_down,0,0,0);
+					}
+					else if (center.y - prev.y < -threshold)
+					{
+						key_press(m_up,0,0,0);
+					}
 				}
 			}
+			prev = center;
+			break;
 		}
-		prev = center;
-		break;
-    }
+	}
 	
 
 	cvConvertImage(img, img, CV_CVTIMG_SWAP_RB);
@@ -178,9 +188,12 @@ void Camera::con_detect_and_draw(IplImage* img)
     cvEqualizeHist(small_img,small_img); //直方图均衡
 
     //Detect objects if any 
-
-    cvClearMemStorage(storage); 
-    CvSeq* objects = cvHaarDetectObjects(small_img,cascade,storage,1.1,1,CV_HAAR_DO_CANNY_PRUNING,cvSize(150,150));
+	CvSeq** objects = new CvSeq*[FILE_NUM];
+	for(int i = 0; i < cascade_name.csize; ++i)
+	{
+		cvClearMemStorage(storage[i]); 
+		objects[i] = cvHaarDetectObjects(small_img,cascade[i],storage[i],1.1,1,CV_HAAR_DO_CANNY_PRUNING,cvSize(150,150));
+	}
 
 	int left_thr, right_thr, up_thr, down_thr;
 	int h = img->height;
@@ -221,140 +234,143 @@ void Camera::con_detect_and_draw(IplImage* img)
 
 
     //Loop through found objects and draw boxes around them 
-    for( int i = 0; i < (objects? objects->total : 0); i++ ) 
-    { 
-        CvRect* r = (CvRect*)cvGetSeqElem(objects, i); 
-        CvPoint center;
-        int radius; 
-        center.x = cvRound((r->x + r->width*0.5)*scale); 
-        center.y = cvRound((r->y + r->height*0.5)*scale); 
-        radius = cvRound((r->width + r->height)*0.25*scale); 
-        cvCircle(img, center, radius, colors[i%8], 3, 8, 0);
+	for(int k = 0; k < cascade_name.csize; k++)
+	{
+		for( int i = 0; i < (objects[k]? objects[k]->total : 0); i++ ) 
+		{ 
+			CvRect* r = (CvRect*)cvGetSeqElem(objects[k], i); 
+			CvPoint center;
+			int radius; 
+			center.x = cvRound((r->x + r->width*0.5)*scale); 
+			center.y = cvRound((r->y + r->height*0.5)*scale); 
+			radius = cvRound((r->width + r->height)*0.25*scale); 
+			cvCircle(img, center, radius, colors[i%8], 3, 8, 0);
 
-		bool isVertical = true, isHorizontal = true;
+			bool isVertical = true, isHorizontal = true;
 
-		if(center.x > right_thr)
-		{
-			key_press(m_right,0,KEYEVENTF_KEYUP,0); 
-			key_press(m_left,0,0,0);
-		}
-		else if(center.x < left_thr)
-		{
-			key_press(m_left,0,KEYEVENTF_KEYUP,0); 
-			key_press(m_right,0,0,0);
-
-		}
-		else
-		{
-			isHorizontal = false;
-		}
-		
-		if(center.y < up_thr)
-		{
-			key_press(m_down,0,KEYEVENTF_KEYUP,0); 
-			key_press(m_up,0,0,0);		
-		}
-		else if(center.y > down_thr)
-		{
-			key_press(m_up,0,KEYEVENTF_KEYUP,0); 
-			key_press(m_down,0,0,0);		
-		}
-		else
-		{
-			isVertical = false;
-		}
-
-		if(!isHorizontal&&!isVertical)
-		{
-			allkey_up();
-		}
-		break;
-		/*
-		if(prev.x == 0 && prev.y == 0)//初始状态
-		{   
-			prev = center;
-			break;
-		}
-		else
-		{
-			if(KeydownList.value[0] != -1)
-				key_press(KeydownList,0,0,0);
-			
-			if(center.x - prev.x < -(0.5*threshold))
+			if(center.x > right_thr)
 			{
-				if(center.y - prev.y > threshold)
-				{
-					allkey_up();
-					key_press(m_right,0,0,0);
-					key_press(m_down,0,0,0);
-				}
-				else if (center.y - prev.y < -threshold)
-				{
-					allkey_up();
-					key_press(m_right,0,0,0);
-					key_press(m_up,0,0,0);
-				}
-				else if (center.x - prev.x < -(threshold))
-				{
-					//弹起左键同时按下右键
-					key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
-					key_press(m_right,0,0,0);
-					KeydownList = m_right;
-					
-				}
-				else
-				{
-					//弹起左键
-					key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
-					KeydownList.len = 1;
-					KeydownList.value[0] = -1;
-				}
+				key_press(m_right,0,KEYEVENTF_KEYUP,0); 
+				key_press(m_left,0,0,0);
 			}
-			else if(center.x - prev.x > 0.5*threshold)
+			else if(center.x < left_thr)
 			{
-				if(center.y - prev.y > threshold)
-				{
-					allkey_up();
-					key_press(m_left,0,0,0);
-					key_press(m_down,0,0,0);
-				}
-				else if (center.y - prev.y < -threshold)
-				{
-					allkey_up();
-					key_press(m_left,0,0,0);
-					key_press(m_up,0,0,0);
-				}
-				else if (center.x - prev.x > threshold)
-				{
-					//弹起右键同时按下左键
-					key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
-					key_press(m_left,0,0,0);
-					KeydownList = m_left;
-					put_text_onscreen(img,"right",0,0);
-				}
-				else
-				{
-					key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
-					KeydownList.len = 1;
-					KeydownList.value[0] = -1;
-				}
+				key_press(m_left,0,KEYEVENTF_KEYUP,0); 
+				key_press(m_right,0,0,0);
+
 			}
 			else
 			{
-				if(center.y - prev.y > threshold)
+				isHorizontal = false;
+			}
+		
+			if(center.y < up_thr)
+			{
+				key_press(m_down,0,KEYEVENTF_KEYUP,0); 
+				key_press(m_up,0,0,0);		
+			}
+			else if(center.y > down_thr)
+			{
+				key_press(m_up,0,KEYEVENTF_KEYUP,0); 
+				key_press(m_down,0,0,0);		
+			}
+			else
+			{
+				isVertical = false;
+			}
+
+			if(!isHorizontal&&!isVertical)
+			{
+				allkey_up();
+			}
+			break;
+			/*
+			if(prev.x == 0 && prev.y == 0)//初始状态
+			{   
+				prev = center;
+				break;
+			}
+			else
+			{
+				if(KeydownList.value[0] != -1)
+					key_press(KeydownList,0,0,0);
+			
+				if(center.x - prev.x < -(0.5*threshold))
 				{
-					key_press(m_down,0,0,0);
+					if(center.y - prev.y > threshold)
+					{
+						allkey_up();
+						key_press(m_right,0,0,0);
+						key_press(m_down,0,0,0);
+					}
+					else if (center.y - prev.y < -threshold)
+					{
+						allkey_up();
+						key_press(m_right,0,0,0);
+						key_press(m_up,0,0,0);
+					}
+					else if (center.x - prev.x < -(threshold))
+					{
+						//弹起左键同时按下右键
+						key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
+						key_press(m_right,0,0,0);
+						KeydownList = m_right;
+					
+					}
+					else
+					{
+						//弹起左键
+						key_press(m_left,0,KEYEVENTF_KEYUP,0); //left
+						KeydownList.len = 1;
+						KeydownList.value[0] = -1;
+					}
 				}
-				else if (center.y - prev.y < -threshold)
+				else if(center.x - prev.x > 0.5*threshold)
 				{
-					key_press(m_up,0,0,0);
+					if(center.y - prev.y > threshold)
+					{
+						allkey_up();
+						key_press(m_left,0,0,0);
+						key_press(m_down,0,0,0);
+					}
+					else if (center.y - prev.y < -threshold)
+					{
+						allkey_up();
+						key_press(m_left,0,0,0);
+						key_press(m_up,0,0,0);
+					}
+					else if (center.x - prev.x > threshold)
+					{
+						//弹起右键同时按下左键
+						key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
+						key_press(m_left,0,0,0);
+						KeydownList = m_left;
+						put_text_onscreen(img,"right",0,0);
+					}
+					else
+					{
+						key_press(m_right,0,KEYEVENTF_KEYUP,0); //right
+						KeydownList.len = 1;
+						KeydownList.value[0] = -1;
+					}
+				}
+				else
+				{
+					if(center.y - prev.y > threshold)
+					{
+						key_press(m_down,0,0,0);
+					}
+					else if (center.y - prev.y < -threshold)
+					{
+						key_press(m_up,0,0,0);
+					}
 				}
 			}
+			prev = center;
+			break;
+			*/
 		}
-		prev = center;
-		break;
-		*/
-    }
+	}
 	
 	//cvShowImage( "Camera", img ); 
 	cvConvertImage(img, img, CV_CVTIMG_SWAP_RB);

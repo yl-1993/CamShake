@@ -96,9 +96,17 @@ void CamShake::setKeyBind()
 	str_arr[3] = q2s(this->ui.plainTextEdit_7->m_str);//down
 	this->cam->set_key_bind(str_arr);
 	if(this->ui.Face->isChecked())
-		this->cam->cascade_name = "haarcascade_frontalface_alt.xml";
+	{
+		this->cam->cascade_name.cname[0] = "haarcascade_frontalface_alt.xml";
+		this->cam->cascade_name.csize = 1;
+	}
 	if(this->ui.Fist->isChecked())
-		this->cam->cascade_name = "fist.dat";
+	{
+		this->cam->cascade_name.cname[0] = "fist.dat";
+		this->cam->cascade_name.csize = 1;
+		this->cam->cascade_name.cname[1] = "palm.dat";
+		this->cam->cascade_name.csize = 2;
+	}
 }
 void CamShake::closeEvent(QCloseEvent* evn)
 {
